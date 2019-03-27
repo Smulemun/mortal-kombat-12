@@ -19,7 +19,8 @@ maps = pygame.image.load(os.path.join('data\misc', 'maps.png'))
 classic = pygame.image.load(os.path.join('data\maps', 'classic.png'))
 fizmat = pygame.image.load(os.path.join('data\maps', 'fizmat.png'))
 outworld = pygame.image.load(os.path.join('data\maps', 'outworld.png'))
-
+forest = pygame.image.load(os.path.join('data\maps', 'forest.png'))
+pit = pygame.image.load(os.path.join('data\maps', 'pit.png'))
 
 fight = pygame.mixer.Sound('data\sounds\sf_fight.ogg')
 punch = pygame.mixer.Sound('data\sounds\punch.ogg')
@@ -752,9 +753,6 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                 kombo_time_p1 -= 1
             
             if punch_p1 and not p1_inv: 
-                if snd1:
-                    punch.play()
-                    snd1 = False
                 if timer1 >= 5:
                     p1_image = player1.punch1
                 else:
@@ -767,12 +765,10 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                     if player1_x + 220 >= player2_x and not p2_inv:
                         freeze_time_p2 = 0
                         dmg_p2 += 3
+                        punch.play()
                     snd1 = True
             
-            if kombo_p1 and not p1_inv:
-                if snd1:
-                    punch.play()
-                    snd1 = False                
+            if kombo_p1 and not p1_inv:               
                 if ktimer_p1 >= 10:
                     p1_image = player1.kombo1
                 else:
@@ -785,6 +781,7 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                     snd1 = True
                     if player1_x + 210 >= player2_x and not p2_inv:
                         dmg_p2 += 5
+                        punch.play()
                         stun_timer_p2 = 0
                         p2_inv_timer = 50
                         p2_inv = True
@@ -861,10 +858,7 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                 kombo_time_p2 -= 1
               
                 
-            if punch_p2 and not p2_inv:
-                if snd2:
-                    punch.play()
-                    snd2 = False                
+            if punch_p2 and not p2_inv:                
                 if timer2 >= 5:
                     p2_image = player2.punch1
                     shift = 20
@@ -880,13 +874,11 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                     if player1_x + 220 >= player2_x and not p1_inv:
                         freeze_time_p1 = 0
                         dmg_p1 += 3
+                        punch.play()
                     snd2 = True
                         
                 
-            if kombo_p2 and not p2_inv:
-                if snd1:
-                    punch.play()
-                    snd1 = False                
+            if kombo_p2 and not p2_inv:              
                 if ktimer_p2 >= 10:
                     p2_image = player2.kombo1
                     shift = 20
@@ -902,6 +894,7 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                     snd2 = True
                     if player1_x + 210 >= player2_x and not p1_inv:
                         dmg_p1 += 5
+                        punch.play()
                         stun_timer_p1 = 0
                         p1_inv_timer = 50
                         p1_inv = True
@@ -1006,6 +999,9 @@ while is_menu:
             elif 554 <= x <= 816 and 506 <= y <= 600 and event.button == 1 and not chars_menu and not maps_menu:
                 is_menu = False
                 
+            elif 179 <= x <= 364 and 470 <= y <= 653 and event.button == 1 and maps_menu:
+                current_map = forest            
+                
             elif 400 <= x <= 585 and 470 <= y <= 653 and event.button == 1 and maps_menu:
                 current_map = outworld  
                 
@@ -1013,7 +1009,10 @@ while is_menu:
                 current_map = fizmat           
                 
             elif 834 <= x <= 1019 and 470 <= y <= 653 and event.button == 1 and maps_menu:
-                current_map = classic          
+                current_map = classic  
+                
+            elif 1053 <= x <= 1238 and 470 <= y <= 653 and event.button == 1 and maps_menu:
+                current_map = pit           
                 
             elif not chars_menu and not maps_menu and event.button == 2:
                 you_suck.play()
@@ -1041,16 +1040,29 @@ while is_menu:
                     frame_p1 = 1  
                     
             if event.key == pygame.K_t and chars_menu:
-                if frame_p1 == 1:
+                
+                if frame_p1 == 1 and char1 == None:
                     char1 = Scorpion()
                     scorpion.play()
-                elif frame_p1 == 2:
+                    
+                elif frame_p1 == 2 and char1 == None:
                     pass
-                elif frame_p1 == 3:
+                
+                elif frame_p1 == 3 and char1 == None:
+                    randomizer = random.randint(0, 1)
+                    
+                    if randomizer == 0:
+                        char1 = Scorpion()
+                        scorpion.play()
+                    
+                    elif randomizer == 1:
+                        char1 = Sub_zero() 
+                        sub_zero.play()                        
+                
+                elif frame_p1 == 4 and char1 == None:
                     pass
-                elif frame_p1 == 4:
-                    pass
-                elif frame_p1 == 5:
+                
+                elif frame_p1 == 5 and char1 == None:
                     char1 = Sub_zero() 
                     sub_zero.play()
                     
@@ -1068,16 +1080,29 @@ while is_menu:
                     frame_p2 = 1
                     
             if event.key == pygame.K_o and chars_menu:
-                if frame_p2 == 1:
+                
+                if frame_p2 == 1 and char2 == None:
                     char2 = Scorpion()
                     scorpion.play()
-                elif frame_p2 == 2:
+                    
+                elif frame_p2 == 2 and char2 == None:
                     pass
-                elif frame_p2 == 3:
+                
+                elif frame_p2 == 3 and char2 == None:
+                    randomizer = random.randint(0, 1)
+                    
+                    if randomizer == 0:
+                        char2 = Scorpion()
+                        scorpion.play()
+                    
+                    elif randomizer == 1:
+                        char2 = Sub_zero() 
+                        sub_zero.play()
+                
+                elif frame_p2 == 4 and char2 == None:
                     pass
-                elif frame_p2 == 4:
-                    pass
-                elif frame_p2 == 5:
+                
+                elif frame_p2 == 5 and char2 == None:
                     char2 = Sub_zero() 
                     sub_zero.play()
                             
