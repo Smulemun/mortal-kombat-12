@@ -159,6 +159,7 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
     fatality = pygame.image.load(os.path.join('data\misc', 'fatality.png'))
     scorpion_wins = pygame.image.load(os.path.join('data\misc', 'scorpion_wins.png'))
     sub_zero_wins = pygame.image.load(os.path.join('data\misc', 'sub-zero_wins.png'))
+    pause_img = pygame.image.load(os.path.join('data\misc', 'pause.png'))
     
     sz_fat1 = pygame.mixer.Sound('data\sounds\sz_fat1.ogg')
     sz_fat2 = pygame.mixer.Sound('data\sounds\sz_fat2.ogg')
@@ -167,6 +168,7 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
     
     quit = False
     running = True
+    pause = False
     fight.play()
     while running:
         
@@ -220,6 +222,12 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                             
                 if event.key == pygame.K_DOWN:
                     pressed_down = True                 
+                            
+                if event.key == pygame.K_ESCAPE:
+                    if pause:
+                        pause = False
+                    else:
+                        pause = True
                             
                 if event.key == pygame.K_o and kombo_time_p2 >= 1 and not p2_inv and not kombo_p2:
                     kombo_time_p2 = 0
@@ -289,7 +297,10 @@ def game_loop(character1 = Scorpion(), character2 = Sub_zero(), bg_map = fizmat)
                     p1_image = player1.stand
                     stop_p1 = False
                  
-        if p1_win:
+        if pause:
+            screen.blit(pause_img, (0, 0))
+        
+        elif p1_win:
             
             p1_image = player1.stand
             p2_image = player2.finish
